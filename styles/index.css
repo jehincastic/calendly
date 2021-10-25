@@ -1,0 +1,36 @@
+::-webkit-scrollbar {
+  width: 6px !important;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent !important;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.23) !important;
+  border-radius: 24px;
+  transition: all 0.5s;
+  cursor: pointer;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(146, 151, 165, 1) !important;
+}
+
+::-webkit-scrollbar-button {
+  background-color: transparent !important;
+}
+
+::-webkit-scrollbar-corner {
+  background-color: transparent !important;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type=number] {
+  -moz-appearance: textfield;
+}

@@ -1,0 +1,46 @@
+{
+  "name": "calendly",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "migrate": "prisma migrate dev",
+    "generate": "prisma generate",
+    "push": "prisma db push"
+  },
+  "dependencies": {
+    "@emotion/cache": "^11.5.0",
+    "@emotion/react": "^11.5.0",
+    "@emotion/server": "^11.4.0",
+    "@emotion/styled": "^11.3.0",
+    "@mui/icons-material": "^5.0.4",
+    "@mui/lab": "^5.0.0-alpha.51",
+    "@mui/material": "^5.0.4",
+    "@mui/styles": "^5.0.1",
+    "@prisma/client": "^3.3.0",
+    "@sendgrid/mail": "^7.5.0",
+    "argon2": "^0.28.2",
+    "axios": "^0.23.0",
+    "date-fns": "^2.25.0",
+    "date-fns-tz": "^1.1.6",
+    "formik": "^2.2.9",
+    "googleapis": "^89.0.0",
+    "handlebars": "^4.7.7",
+    "jsonwebtoken": "^8.5.1",
+    "next": "11.1.2",
+    "react": "17.0.2",
+    "react-dom": "17.0.2",
+    "yup": "^0.32.11"
+  },
+  "devDependencies": {
+    "@types/jsonwebtoken": "^8.5.5",
+    "@types/react": "17.0.31",
+    "eslint": "8.1.0",
+    "eslint-config-next": "11.1.2",
+    "prisma": "^3.3.0",
+    "typescript": "4.4.4"
+  }
+}

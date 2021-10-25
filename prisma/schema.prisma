@@ -1,0 +1,139 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id                    String                @id @default(cuid())
+  firstName             String
+  lastName              String
+  email                 String                @unique
+  emailVerified         Boolean               @default(false)
+  image                 String?
+  password              String
+  country               String
+  timezone              String
+  timezoneDiff          String
+  accounts              Account[]
+  event                 Event[]
+  schedules             Schedule[]
+  webHooks              WebHook[]
+  workflows             Workflow[]
+  verificationRequest   VerificationRequest?
+  createdAt             DateTime              @default(now())
+  updatedAt             DateTime              @default(now())
+  @@map(name: "user")
+}
+
+model VerificationRequest {
+  id         String                           @id @default(cuid())
+  userId     String                           @unique
+  token      String                           @unique
+  user       User                             @relation(fields: [userId], references: [id])
+  expires    DateTime
+  createdAt  DateTime                         @default(now())
+  updatedAt  DateTime                         @default(now())
+  @@map(name: "verification_requests")
+}
+
+model Account {
+  id                 String       @id @default(cuid())
+  providerAccountId  String       @unique
+  email              String       @unique
+  name               String
+  providerType       String
+  refreshToken       String?
+  accessToken        String?
+  accessTokenExpires Int?
+  userId             String
+  user               User         @relation(fields: [userId], references: [id])
+  event              Event[]
+  createdAt          DateTime     @default(now())
+  updatedAt          DateTime     @default(now())
+  @@map(name: "accounts")
+}
+
+model Schedule {
+  id                    String        @id @default(cuid())
+  name                  String
+  weeklyHours           Json
+  dateOverrides         Json
+  userId                String
+  user                  User          @relation(fields: [userId], references: [id])
+  event                 Event[]
+  createdAt             DateTime      @default(now())
+  updatedAt             DateTime      @default(now())
+  @@unique([name, userId], name: "unique_schedule")
+  @@map(name: "schedule")
+}
+
+model Event {
+  id                    String        @id @default(cuid())
+  name                  String
+  link                  String
+  description           String
+  location              LocationType
+  isPrivate             Boolean       @default(false)
+  password              String?
+  isApprovalRequired    Boolean       @default(false)
+  duration              String
+  locationInfo          Json
+  dateRange             Json
+  isActive              Boolean       @default(false)
+  accountId             String
+  userId                String
+  scheduleId            String
+  workflowId            String?
+  user                  User          @relation(fields: [userId], references: [id])
+  account               Account       @relation(fields: [accountId], references: [id])
+  schedule              Schedule      @relation(fields: [scheduleId], references: [id])
+  workflow              Workflow?      @relation(fields: [workflowId], references: [id])
+  createdAt             DateTime      @default(now())
+  updatedAt             DateTime      @default(now())
+  @@unique([name, accountId], name: "unique_event")
+  @@map(name: "event")
+}
+
+model Workflow {
+  id                    String        @id @default(cuid())
+  workflowSteps         Json
+  userId                String
+  user                  User          @relation(fields: [userId], references: [id])
+  events                Event[]
+  createdAt             DateTime      @default(now())
+  updatedAt             DateTime      @default(now())
+  @@map(name: "workflow")
+}
+
+model WebHook {
+  id                    String        @id @default(cuid())
+  url                   String
+  input                 Json
+  method                HttpMethod
+  userId                String
+  user                  User          @relation(fields: [userId], references: [id])
+  createdAt             DateTime      @default(now())
+  updatedAt             DateTime      @default(now())
+  @@map(name: "webhook")
+}
+
+enum LocationType {
+  INPERSON
+  PHONE
+  GMEET
+}
+
+enum HttpMethod {
+  GET
+  POST
+  DELETE
+  PUT
+  PATCH
+}
