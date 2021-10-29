@@ -34,3 +34,7 @@ input::-webkit-inner-spin-button {
 input[type=number] {
   -moz-appearance: textfield;
 }
+
+#mui-rte-toolbar + div {
+  margin-left: 15px;
+}

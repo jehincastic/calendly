@@ -1,3 +1,4 @@
+import { EventType } from "@prisma/client";
 import {
   AlertColor,
 } from "@mui/material";
@@ -42,6 +43,11 @@ export interface SignUpInput extends CommonInputForm {
   timezoneDiff: string;
 }
 
+export interface OptionType {
+  value: string;
+  label: string;
+}
+
 export interface LoginResponse {
   token: string;
   user: JWTInfo,
@@ -79,14 +85,14 @@ export interface AccountDisplay {
   providerType: string;
 }
 
-enum WeekDays {
+export enum WeekDays {
+  SUN="SUN",
   MON="MON",
   TUE="TUE",
   WED="WED",
   THU="THU",
   FRI="FRI",
   SAT="SAT",
-  SUN="SUN",
 };
 
 export interface ScheduleSlot {
@@ -111,7 +117,52 @@ export interface SheduleDataDisplay {
   id: string;
   name: string;
   weeklyHours: WeeklyHours;
-  dateOverrides: any;
+  dateOverrides: DateOverrides;
+}
+
+export interface SheduleDataAllDisplay {
+  id: string;
+  name: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface EventsDisplayAll {
+  id: string;
+  name: string;
+  link: string;
+  type: EventType;
+  isPrivate: boolean;
+  isApprovalRequired: boolean;
+  duration: string;
+  endDate: string;
+  isActive: boolean;
+  scheduleName: string;
+}
+
+export interface EventFormSubmit {
+  id?: string;
+  name: string;
+  link: string;
+  description: string;
+  type: EventType;
+  isPrivate: boolean;
+  password: string;
+  isApprovalRequired: boolean;
+  duration: number;
+  durationVal: string;
+  typeInfo: {};
+  dateRange: Date[];
+  scheduleId: string;
+  accountId: string;
+  isActive?: boolean;
+}
+
+export interface ScheduleInput {
+  id?: string;
+  name: string;
+  weeklyHours: WeeklyHours;
+  dateOverrides: DateOverrides;
 }
 
 export interface CalendarInfoInput {
@@ -160,4 +211,9 @@ export interface TimezoneOption {
   countryCode: string;
   gmtOffset: number;
   timestamp: number;
+}
+
+export interface ScheduleCompProps {
+  schedule: SheduleDataDisplay;
+  setScheduleData: (newSchedule: SheduleDataDisplay) => void;
 }

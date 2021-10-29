@@ -31,6 +31,7 @@ const ApiHandler = async (
             refreshToken: token.refresh_token,
             accessToken: token.access_token,
             email: payload.email || "",
+            username: payload.email?.split("@")[0] || "",
             name: payload.name || "",
           }
         });

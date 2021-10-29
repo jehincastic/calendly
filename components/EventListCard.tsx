@@ -1,4 +1,4 @@
-import * as React from "react";
+import React from "react";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
@@ -7,18 +7,18 @@ import Box from "@mui/material/Box";
 import { useRouter } from "next/router";
 
 import Button from "@components/Button";
-import { AccountDisplay } from "@interfaces/index";
-import { capitalizeFirstLetter } from "@utils/index";
-import description from "@config/providerDesc";
+import { EventsDisplayAll } from "@interfaces/index";
 import { useAuth } from "@providers/AuthProvider";
 import { LoadingContext } from "@providers/LoadingProvider";
 
-interface AccountsListCardProps {
-  account: AccountDisplay;
+interface EventListCardProps {
+  event: EventsDisplayAll;
+  username: string;
 }
 
-const AccountListCard: React.FC<AccountsListCardProps> = ({
-  account,
+const EventListCard: React.FC<EventListCardProps> = ({
+  event,
+  username,
 }) => {
   const { user } = useAuth();
   const { isLoading } = React.useContext(LoadingContext);
@@ -28,16 +28,16 @@ const AccountListCard: React.FC<AccountsListCardProps> = ({
     <Card sx={{ width: "100%" }}>
       <CardContent>
         <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-          {account.name}
+          /{username}/{event.link}
         </Typography>
         <Typography variant="h6" component="div">
-          {capitalizeFirstLetter(account.providerType.toLowerCase())}
+          {event.name}
         </Typography>
         <Typography sx={{ mb: 1.5 }} color="text.secondary">
-          {account.email}
+          {event.scheduleName}
         </Typography>
         <Typography variant="body2">
-          {description[account.providerType.toLowerCase()]}
+          Expies On : {event.endDate}
         </Typography>
       </CardContent>
       <CardActions>
@@ -51,20 +51,18 @@ const AccountListCard: React.FC<AccountsListCardProps> = ({
           <Button
             loading={user.loading || isLoading}
             size="small"
-            onClick={() => {
-              router.push(`/accounts/events/${account.id}`);
-            }}
+            onClick={() => {}}
           >
-            View Events
+            Edit Event
           </Button>
           <Button
             loading={user.loading || isLoading}
             onClick={() => {
-              router.push(`/accounts/calendar/${account.id}`);
+              router.push(`/${username}/${event.link}`)
             }}
             size="small"
           >
-            View Calendar
+            Open Event
           </Button>
         </Box>
       </CardActions>
@@ -72,4 +70,4 @@ const AccountListCard: React.FC<AccountsListCardProps> = ({
   );
 };
 
-export default AccountListCard;
+export default EventListCard;

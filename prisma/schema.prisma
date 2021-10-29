@@ -47,6 +47,7 @@ model Account {
   id                 String       @id @default(cuid())
   providerAccountId  String       @unique
   email              String       @unique
+  username           String       @unique
   name               String
   providerType       String
   refreshToken       String?
@@ -78,15 +79,16 @@ model Event {
   id                    String        @id @default(cuid())
   name                  String
   link                  String
-  description           String
-  location              LocationType
+  description           Json
+  type                  EventType
   isPrivate             Boolean       @default(false)
   password              String?
   isApprovalRequired    Boolean       @default(false)
   duration              String
-  locationInfo          Json
-  dateRange             Json
-  isActive              Boolean       @default(false)
+  typeInfo              Json
+  startDate             String
+  endDate               String
+  isActive              Boolean       @default(true)
   accountId             String
   userId                String
   scheduleId            String
@@ -98,6 +100,7 @@ model Event {
   createdAt             DateTime      @default(now())
   updatedAt             DateTime      @default(now())
   @@unique([name, accountId], name: "unique_event")
+  @@unique([link, userId], name: "unique_link")
   @@map(name: "event")
 }
 
@@ -124,10 +127,11 @@ model WebHook {
   @@map(name: "webhook")
 }
 
-enum LocationType {
+enum EventType {
   INPERSON
   PHONE
   GMEET
+  ZOOM
 }
 
 enum HttpMethod {

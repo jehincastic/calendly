@@ -1,15 +1,17 @@
 import type { NextApiRequest, NextApiResponse } from "next"
 
 import {
-  SheduleDataAllDisplay,
   CommonResponse,
+  DateOverrides,
+  SheduleDataDisplay,
+  WeeklyHours,
 } from "@interfaces/index";
 import { isAuthenticated } from "@utils/auth";
 import prisma from "@lib/prisma";
 
 const ApiHandler = async (
   req: NextApiRequest,
-  res: NextApiResponse<CommonResponse<SheduleDataAllDisplay[] | string>>,
+  res: NextApiResponse<CommonResponse<SheduleDataDisplay | string>>,
 ) => {
   try {
     if (req.method?.toLowerCase() === "get") {
@@ -20,27 +22,31 @@ const ApiHandler = async (
         authenticated,
         payload: userInfo,
       } = isAuthenticated(authorization);
+      const {
+        id,
+      } = req.query as { id: string; };
       if (authenticated && userInfo) {
-        const schedules = await prisma.schedule.findMany({
+        const schedule = await prisma.schedule.findFirst({
           where: {
             userId: userInfo.id,
+            id,
           },
-          select: {
-            id: true,
-            name: true,
-            createdAt: true,
-            updatedAt: true,
-          }
         });
-        const returnData: SheduleDataAllDisplay[] = schedules.map(sch => ({
-          name: sch.name,
-          id: sch.id,
-          createdAt: sch.createdAt,
-          updatedAt: sch.updatedAt,
-        }))
-        return res.json({
-          status: "SUCCESS",
-          data: returnData,
+        if (schedule) {
+          const returnData: SheduleDataDisplay = {
+            name: schedule.name,
+            id: schedule.id,
+            weeklyHours: schedule.weeklyHours as unknown as WeeklyHours,
+            dateOverrides: schedule.dateOverrides as unknown as DateOverrides,
+          };
+          return res.json({
+            status: "SUCCESS",
+            data: returnData,
+          });
+        }
+        return res.status(403).json({
+          status: "FAILED",
+          data: "Invalid Input",
         });
       }
       return res.json({

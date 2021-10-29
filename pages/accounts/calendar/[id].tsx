@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 import { LoadingContext } from "@providers/LoadingProvider";
 import { AlertContext } from "@providers/AlertProvider";
 import fetcher from "@utils/fetcher";
-import { CalendarInfo, CalendarInfoInput, LoginResponse } from "@interfaces/index";
+import { CalendarInfo, CalendarInfoInput } from "@interfaces/index";
 import { useAuth } from "@providers/AuthProvider";
 import withNavBar from "@hocs/withNavBar";
 import { getStartAndEndTime } from "@utils/index";
@@ -26,8 +26,8 @@ const EventsListPage: React.FC<EventListProps> = () => {
       timeMax,
     } = getStartAndEndTime(user.timezone);
     const input: CalendarInfoInput = {
-      timeMin,
-      timeMax,
+      timeMin: timeMin.toISOString(),
+      timeMax: timeMax.toISOString(),
       accountId,
     };
     const {
@@ -79,9 +79,9 @@ const EventsListPage: React.FC<EventListProps> = () => {
     if (typeof accountId === "string") {
       const data = await viewCalendar(accountId);
       setCalInfo(data);
+      setLoadingComp(false);
+      setLoading(false);
     }
-    setLoadingComp(false);
-    setLoading(false);
   };
 
   return (

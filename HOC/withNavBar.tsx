@@ -129,6 +129,7 @@ const Navbar: React.FC = ({ children }) => {
       updatedAt: new Date(),
       loading: true,
     });
+    router.push("/login");
   };
 
   const iconsList: MenuItem[][] = [

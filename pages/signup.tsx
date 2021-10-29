@@ -105,7 +105,11 @@ const Signup: NextPage = () => {
               severity: "error",
             });
           } else {
-            setTimezones(data as TimezoneOption[]);
+            const timezoneData = data as TimezoneOption[];
+            setTimezones(timezoneData);
+            if (timezoneData.length === 1) {
+              setTimezone(timezoneData[0]);
+            }
           }
         })
         .finally(() => {

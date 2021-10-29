@@ -14,7 +14,7 @@ const fetcher = async <I, O>(
       headers.append("authorization", `Bearer ${token}`);
     }
     const options: RequestInit = {
-      method,
+      method: method.toUpperCase(),
       headers,
       credentials: "same-origin",
     };
